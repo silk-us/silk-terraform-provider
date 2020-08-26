@@ -15,7 +15,7 @@ Installation and Usage information can be found in the Silk Terraform Provider [
 
 ```hcl
 provider "silk" {
-  server = "35.232.76.202"
+  server = "10.0.10.10"
   username = "admin"
   password = "password"
 }
