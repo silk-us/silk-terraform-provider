@@ -14,13 +14,46 @@ Installation and Usage information can be found in the Silk Terraform Provider [
 # Example
 
 ```hcl
-provider "silk" {}
+provider "silk" {
+  server = "35.232.76.202"
+  username = "admin"
+  password = "password"
+}
+
+variable "vm-name" {
+    type = string
+    default = "test"
+}
+variable "vg-name" {
+    type = string
+    default = "-vg"
+}
+
+variable "vol01-name" {
+    type = string
+    default = "-vol-01"
+}
+
+resource "silk_volume" "Silk-Volume" {
+  name = "${var.vm-name}${var.vol01-name}"
+  size_in_gb = 100
+  volume_group_name = silk_volume_group.Silk-Volume-Group.name
+  description = "Build with TF"
+  host_mapping = [silk_host.Silk-Host.name]
+  allow_destroy = true
+}
 
 resource "silk_volume_group" "Silk-Volume-Group" {
-  name = "TerraformVolumeGroup"
-  quota_in_gb = 30
-  enable_deduplication = true
+  name = "${var.vm-name}${var.vg-name}"
+  quota_in_gb = 0
+  enable_deduplication = false
   description = "Crated through TF"
+}
+
+resource "silk_host" "Silk-Host" {
+  name = var.vm-name
+  host_type = "Linux"
+  iqn = "iqn.1994-05.com.redhat:9fe73c6123a6"
 }
 ```
 # Documentation
